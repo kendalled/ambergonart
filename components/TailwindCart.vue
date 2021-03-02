@@ -25,7 +25,7 @@
           leave-to-class="translate-x-full"
           @after-leave="showWrapper = false"
         >
-          <div v-if="cartOpen" class="w-screen max-w-md">
+          <div v-if="cartOpen" class="w-screen max-w-sm">
             <div class="flex flex-col h-full py-6 overflow-y-scroll bg-white shadow-xl">
               <div class="px-4 sm:px-6">
                 <div class="flex items-start justify-between">
