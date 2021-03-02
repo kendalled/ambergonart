@@ -191,7 +191,7 @@
         </div>
         <div class="mt-16">
           <h3 class="text-2xl font-medium text-gray-600">
-            Fashions
+            Latest drops
           </h3>
           <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <div class="w-full max-w-sm mx-auto overflow-hidden rounded-md shadow-md">
@@ -282,7 +282,7 @@
         </div>
         <div class="mt-16">
           <h3 class="text-2xl font-medium text-gray-600">
-            Fashions
+            Hot deals
           </h3>
           <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <div class="w-full max-w-sm mx-auto overflow-hidden rounded-md shadow-md">
