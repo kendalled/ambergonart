@@ -34,7 +34,7 @@
         </div>
       </div>
     </div>
-    <span class="text-gray-600">20$</span>
+    <span class="text-gray-600">$20.00</span>
   </div>
 </template>
 
