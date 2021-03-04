@@ -1,7 +1,7 @@
 <template>
   <div class="w-full max-w-sm mx-auto overflow-hidden rounded-md shadow-md">
-    <div class="flex items-end justify-end w-full h-56 bg-cover" style="background-image: url('https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=376&q=80')">
-      <button class="p-2 mx-5 -mb-4 text-white bg-gradient-to-r from-blue-400 to-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:bg-blue-500">
+    <div class="flex items-end justify-end w-full h-56 bg-cover" :style="'background-image: url(' + img + ')'">
+      <button class="p-2 mx-5 -mb-4 text-white bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none focus:bg-blue-500" @click.prevent="addToCart">
         <svg
           class="w-5 h-5"
           fill="none"
@@ -15,15 +15,39 @@
     </div>
     <div class="px-5 py-3">
       <h3 class="text-gray-700">
-        Day of the Dead Rug
+        {{ title }}
       </h3>
-      <span class="mt-2 text-gray-500">$24</span>
+      <span class="mt-2 text-gray-500">{{ displayPrice }}</span>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ProductCard'
+  name: 'ProductCard',
+  props: {
+    title: {
+      type: String,
+      default: 'Product name'
+    },
+    img: {
+      type: String,
+      default: 'https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=376&q=80'
+    },
+    price: {
+      type: Number,
+      default: 19.99
+    }
+  },
+  computed: {
+    displayPrice () {
+      return ('$' + this.price.toString())
+    }
+  },
+  methods: {
+    addToCart () {
+      this.$emit('carted')
+    }
+  }
 }
 </script>

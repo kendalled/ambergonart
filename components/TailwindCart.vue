@@ -52,7 +52,14 @@
               </div>
               <div class="relative flex-1 px-4 mt-6 sm:px-6">
                 <!-- Replace with your content -->
-                <CheckoutItem v-for="item in currentCart" :key="item" :item-title="item" />
+                <CheckoutItem
+                  v-for="item in cart"
+                  :key="item.title"
+                  :item-title="item.title"
+                  :price="item.price"
+                  :img="item.img"
+                  @remove="emitRemove(item)"
+                />
 
                 <div class="mt-8">
                   <form class="flex items-center justify-center">
@@ -62,7 +69,7 @@
                     </button>
                   </form>
                 </div>
-                <a class="flex items-center justify-center px-3 py-2 mt-4 text-sm font-medium text-white uppercase bg-blue-600 rounded hover:bg-blue-500 focus:outline-none focus:bg-blue-500">
+                <nuxt-link title="Checkout" to="/checkout" class="flex items-center justify-center px-3 py-2 mt-4 text-sm font-medium text-white uppercase bg-blue-600 rounded hover:bg-blue-500 focus:outline-none focus:bg-blue-500">
                   <span>Checkout</span>
                   <svg
                     class="w-5 h-5 mx-2"
@@ -73,7 +80,7 @@
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   ><path d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                </a>
+                </nuxt-link>
                 <!-- /End replace -->
               </div>
             </div>
@@ -92,6 +99,12 @@ export default {
     shown: {
       type: Boolean,
       default: false
+    },
+    cart: {
+      type: Array,
+      default () {
+        return []
+      }
     }
   },
   data () {
@@ -105,15 +118,35 @@ export default {
       ]
     }
   },
+  computed: {
+    cartSize () {
+      return this.cart.length
+    }
+  },
   watch: {
     shown (newVal) {
       if (newVal) {
         this.showWrapper = true
         this.cartOpen = true
       }
+    },
+    cartSize (newVal, oldVal) {
+      if (newVal > 0 && oldVal === 0) {
+        this.emitOpen()
+      } else if (newVal === 0 && oldVal > 0) {
+        this.emitClose()
+      }
+      // console.log('old val: ' + oldVal)
+      // console.log('new val: ' + newVal)
     }
   },
   methods: {
+    emitRemove (item) {
+      this.$emit('remove', item)
+    },
+    emitOpen () {
+      this.$emit('open')
+    },
     emitClose () {
       if (this.cartOpen) {
         this.cartOpen = false

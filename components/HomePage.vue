@@ -2,7 +2,7 @@
   <!-- todo: rethink pt -->
   <div class="pt-8 bg-gray-50">
     <PageHeader :open="cart" @toggle="cart = !cart" />
-    <TailwindCart :shown="cart" @close="closeCart" />
+    <TailwindCart :cart="currentCart" :shown="cart" @open="openCart" @remove="removeItem" @close="closeCart" />
     <main class="my-8">
       <div class="container px-6 mx-auto">
         <div class="h-64 overflow-hidden bg-center bg-cover rounded-md" style="background-image: url('https://images.unsplash.com/photo-1594040226829-7f251ab46d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1280&q=80')">
@@ -12,7 +12,7 @@
                 Custom Rugs &amp; Decor
               </h2>
               <p class="mt-2 text-gray-300">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore facere provident molestias ipsam sint voluptatum pariatur.
+                Decorative rugs of almost any size, made by hand &amp; shipped to you. Have a request? Feel free to ask for a commission.
               </p>
               <button class="flex items-center px-3 py-2 mt-4 text-sm font-medium text-white uppercase bg-blue-600 rounded hover:bg-blue-500 focus:outline-none focus:bg-blue-500">
                 <span>Shop Now</span>
@@ -37,7 +37,7 @@
                   Prints &amp; Sketches
                 </h2>
                 <p class="mt-2 text-gray-300">
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore facere provident molestias ipsam sint voluptatum pariatur.
+                  A collection of hand drawn sketches as well as silk screen prints. Sold with accompanying frames and shipped with care.
                 </p>
                 <button class="flex items-center mt-4 text-sm font-medium text-white uppercase rounded hover:underline focus:outline-none">
                   <span>Shop Now</span>
@@ -61,7 +61,7 @@
                   Paintings
                 </h2>
                 <p class="mt-2 text-gray-300">
-                  Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempore facere provident molestias ipsam sint voluptatum pariatur.
+                  Original paintings of various styles. Watercolor &amp; oil paintings are my speciality - choose between two framing options.
                 </p>
                 <button class="flex items-center mt-4 text-sm font-medium text-white uppercase rounded hover:underline focus:outline-none">
                   <span>Shop Now</span>
@@ -84,7 +84,14 @@
             Latest releases
           </h3>
           <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <ProductCard v-for="j in 4" :key="j" />
+            <ProductCard
+              v-for="product in latest"
+              :key="product.title"
+              :title="product.title"
+              :price="product.price"
+              :img="product.img"
+              @carted="addToCart(product)"
+            />
           </div>
         </div>
         <div class="my-16">
@@ -92,14 +99,14 @@
             Hot deals
           </h3>
           <div class="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <ProductCard v-for="i in 4" :key="i" />
+            <ProductCard v-for="product in sales" :key="product.title" :title="product.title" :price="product.price" />
           </div>
         </div>
       </div>
     </main>
 
     <footer class="bg-gray-200">
-      <div class="container flex items-center justify-between px-6 py-3 mx-auto">
+      <div class="container flex flex-col justify-between px-6 py-3 mx-auto sm:items-center sm:flex-row">
         <a href="#" class="text-xl font-bold text-gray-500 hover:text-gray-400">Amber Gon Art</a>
         <p class="py-2 text-gray-500 sm:py-0">
           &copy; 2021. All rights reserved.
@@ -115,12 +122,82 @@ export default {
   name: 'HomePage',
   data () {
     return {
-      cart: false
+      cart: false,
+      currentCart: [],
+      latest: [
+        {
+          title: 'Psychedelic Rug',
+          price: 49.99,
+          freeShipping: false,
+          sale: false,
+          img: 'https://images.unsplash.com/photo-1594040226829-7f251ab46d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=376&q=80'
+        },
+        {
+          title: 'Marble Vase',
+          price: 109.99,
+          freeShipping: true,
+          sale: false,
+          img: 'https://images.unsplash.com/photo-1529136490842-e2da7a4c7b74?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&crop=focalpoint&fp-x=.35&fp-y=1.25&fp-z=3&w=376&q=80'
+        },
+        {
+          title: 'Sketched Portraits',
+          price: 34.99,
+          freeShipping: false,
+          sale: false,
+          img: 'https://images.unsplash.com/photo-1612641605722-60c66c66530c?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=376&q=80'
+        },
+        {
+          title: 'Modernist Rug',
+          price: 89.99,
+          freeShipping: false,
+          sale: false,
+          img: 'https://images.unsplash.com/photo-1569237601515-99a8a113dc6f?ixlib=rb-1.2.1&auto=format&fit=crop&w=376&q=80'
+        }
+      ],
+      sales: [
+        {
+          title: 'Minimalist Animal Prints',
+          price: 14.99,
+          freeShipping: false,
+          sale: true,
+          img: 'https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=376&q=80'
+        },
+        {
+          title: 'Desk Toys',
+          price: 19.99,
+          freeShipping: false,
+          sale: true,
+          img: 'https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=376&q=80'
+        },
+        {
+          title: 'Custom Bracelets',
+          price: 10.99,
+          freeShipping: false,
+          sale: false,
+          img: 'https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=376&q=80'
+        },
+        {
+          title: 'Watercolor Paintings',
+          price: 25.99,
+          freeShipping: false,
+          sale: true,
+          img: 'https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=376&q=80'
+        }
+      ]
     }
   },
   methods: {
+    removeItem (product) {
+      this.currentCart.splice(this.currentCart.indexOf(product))
+    },
+    openCart () {
+      this.cart = true
+    },
     closeCart () {
       this.cart = false
+    },
+    addToCart (product) {
+      this.currentCart.push(product)
     }
   }
 }
